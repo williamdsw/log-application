@@ -1,0 +1,17 @@
+<!-- pie chart -->
+<div class="chart-wrapper">
+    <div id="chart" [hidden]="isLoading || count == 0">
+        <canvas baseChart [data]="pieChartData" [labels]="chartLabels" [chartType]="chartType" [options]="chartOptions"
+                [plugins]="chartPlugins" [legend]="chartLegend">
+        </canvas>
+        <button type="button" class="btn btn-primary" (click)="toggleLegend ();"> Toggle Legend </button>
+    </div>
+
+    <div class="bg-dark p-3 text-center text-white" [hidden]="!isLoading ">
+        <span> Loading... </span>
+    </div>
+
+    <div class="bg-dark p-3 text-center text-white" [hidden]="count > 0">
+        <span> Please insert some data to view the chart! </span>
+    </div>
+</div>

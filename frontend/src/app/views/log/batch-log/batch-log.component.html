@@ -1,0 +1,41 @@
+<!-- batch log -->
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-lg-5 mx-auto mt-5 text-white">
+            <h1 class="text-center text-uppercase "> Insert Log Files </h1>
+            <h4 class="text-center text-monospace"> Only .txt and .log files are allowed! </h4>
+        </div>
+    </div>
+    
+    <div class="box-wrapper mx-auto my-3 my-md-5">
+        <form class="needs-validation" novalidate [formGroup]="form" (ngSubmit)="onSubmit ();">
+            <div class="form-row">
+                <div class="col-12 form-group scalable-group">
+                    <div class="input-group">
+
+                        <!-- file -->
+                        <div class="custom-file">
+                            <input type="file" id="inputFile" class="custom-file-input" value=""
+                                   multiple="true" accept=".txt, .log"
+                                   formControlName="file">
+                            <label for="inputFile" id="labelFile" class="custom-file-label"> Choose File(s) </label>
+                        </div>
+
+                        <!-- upload -->
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary" (click)="buttonSubmit.click ()" [disabled]="this.form.invalid"> Upload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="d-none" #buttonSubmit> Submit </button>
+        </form>
+    </div>
+
+    <!-- file container -->
+    <div class="row my-3 my-md-5 text-white">
+        <div id="fileContainer" class="file-container col-8 mx-auto"></div>
+    </div>
+</section>

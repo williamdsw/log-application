@@ -1,0 +1,106 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~bootstrap/dist/css/bootstrap.css';
+
+body {
+    background-image: linear-gradient(to right, #4f9bb4, #235668);
+}
+
+.box-wrapper {
+    width: 60%;
+}
+
+.bg-darksky {
+    background-color: #1b4958;
+    
+}
+
+input, select, textarea, button, label {
+    border-radius: 0 !important;
+}
+
+.bg-darksky input, .bg-darksky select {
+    background-color: #276479;
+    color: white;
+}
+
+.custom-file-label {
+    background-color: #276479;
+    color: white;
+}
+
+.scalable-group {
+    transform: scale(1.1);
+}
+
+.bg-darksky input:focus, .bg-darksky select:focus {
+    background-color: #327f99;
+    color: white;
+}
+
+input[disabled],
+select[disabled] {
+    background-color: #3f5962 !important;
+}
+
+.required-label {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.invalid-feedback {
+    color: #ffa3ac;
+    font-weight: bold;
+}
+
+.file-container {
+    height: 20rem;
+    max-height: 20rem;
+    overflow: auto;
+    background-image: linear-gradient(to right, #205161, #192f36);
+    padding: 1rem;
+}
+
+/* SEARCH TABLE */
+
+div.table-box {
+    max-width: 930px;
+    padding: 1rem;
+}
+
+div.table-box h2 {
+    display: block;
+    text-emphasis: center;
+}
+
+div.table-box table {
+    width: 250%;
+}
+
+div.table-responsive {
+    max-height: 35rem;
+}
+
+.pagination-container {
+    max-width: 1000px;
+    overflow: auto;
+}
+
+.page-link {
+    color: #007bff !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+.page-item.active .page-link {
+    color: #fff !important;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d !important;
+    background-color: #bebebe;
+}
+
+

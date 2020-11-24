@@ -1,0 +1,118 @@
+<div class="container">
+    <div class="table-box shadow-lg mx-auto my-3 my-md-5 bg-darksky">
+
+        <div>
+            <!-- header -->
+            <h2 class="mb-5 d-block text-center text-white"> Dashboard </h2>
+
+            <!-- search -->
+            <div class="form-row">
+
+                <!-- filter combo -->
+                <div class="col-md-5 my-2 my-md-0">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> Get number of Requests by </span>
+                        </div>
+                        <select #filterCombo class="form-control" (change)="toggleFilter (filterCombo.value);">
+                            <option value="ip-address" selected> IP </option>
+                            <option value="datetime"> Data Interval </option>
+                            <option value="user-agent"> User Agent </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ip address -->
+                <div class="col-md-5 my-2 my-md-0" [hidden]="currentFilter !== 'ip-address'">
+                    <input type="text" id="inputIpAddress" class="form-control" placeholder="255.255.255.255" value="" mask="IP">
+                </div>
+
+                <!-- user agent input -->
+                <div class="col-md-5 my-2 my-md-0" [hidden]="currentFilter !== 'user-agent'">
+                    <div class="input-group">
+                        <input type="text" id="inputUserAgent" class="form-control" placeholder="Mozilla..." value="" #inputUserAgent>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="getUserAgent(inputUserAgent)"> Get </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- search button -->
+                <div class="col-md-2 my-1 my-md-0" [hidden]="currentFilter === 'datetime'">
+                    <button type="button" class="btn btn-primary btn-block" (click)="onSearch()"> Search </button>
+                </div>
+            </div>
+
+            <!-- dates -->
+            <div class="form-row my-3">
+                <div class="col-12 my-2 my-md-0" [hidden]="currentFilter !== 'datetime'">
+                    <div class="row">
+
+                        <!-- start -->
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> Start </span>
+                                </div>
+                                <input type="date" id="inputStartDate" class="form-control" value="" maxlength="10">
+                                <div class="input-group-append">
+                                    <input type="time" id="inputStartTime" class="form-control" value="" maxlength="8" step="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- end -->
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> End </span>
+                                </div>
+                                <input type="date" id="inputEndDate" class="form-control" value="" maxlength="10">
+                                <div class="input-group-append">
+                                    <input type="time" id="inputEndTime" class="form-control" value="" maxlength="8" step="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- search button -->
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary btn-block" (click)="onSearch()"> Search </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="numberOfRequestResult" class="bg-dark p-3 text-center text-white mb-3 d-none"></div>
+
+        <accordion [isAnimated]="true">
+
+            <!-- requests by ip -->
+            <accordion-group heading="Most 10 Requests By IP" [isOpen]="true">
+                <div class="card">
+                    <div class="card-body">
+                        <app-line-chart></app-line-chart>
+                    </div>
+                </div>
+            </accordion-group>
+
+            <!-- requests by user agent -->
+            <accordion-group heading="Most 10 Requests By User Agent">
+                <div class="card">
+                    <div class="card-body">
+                        <app-pie-chart></app-pie-chart>
+                    </div>
+                </div>
+            </accordion-group>
+
+            <!-- requests by hour -->
+            <accordion-group heading="Most 10 Requests By Hour">
+                <div class="card">
+                    <div class="card-body">
+                        <app-bar-chart></app-bar-chart>
+                    </div>
+                </div>
+            </accordion-group>
+        </accordion>
+    </div>
+</div>

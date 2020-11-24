@@ -1,0 +1,19 @@
+<!-- bar chart -->
+<div class="chart-wrapper">
+    <div id="chart" [hidden]="isLoading || count == 0">
+        <canvas baseChart 
+                [datasets]="barChartData" [labels]="chartLabels"
+                [options]="chartOptions" [colors]="chartColors"
+                [legend]="chartLegend" [chartType]="chartType"
+                [plugins]="chartPlugins">
+        </canvas>
+    </div>
+    
+    <div class="bg-dark p-3 text-center text-white" [hidden]="!isLoading ">
+        <span> Loading... </span>
+    </div>
+
+    <div class="bg-dark p-3 text-center text-white" [hidden]="count > 0">
+        <span> Please insert some data to view the chart! </span>
+    </div>
+</div>
