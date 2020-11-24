@@ -15,7 +15,7 @@ export abstract class BaseFormComponent<T> {
 
     public form: FormGroup;
     public wasSubmitted = false;
-    protected subscription: Subscription;
+    protected subscription$: Subscription;
     public model: T;
 
     // CONSTRUCTOR
@@ -25,7 +25,7 @@ export abstract class BaseFormComponent<T> {
         protected router: Router,
         protected alertModalService: AlertModalService
     ) {
-        this.subscription = new Subscription();
+        this.subscription$ = new Subscription();
     }
 
     // ABSTRACT FUNCTIONS

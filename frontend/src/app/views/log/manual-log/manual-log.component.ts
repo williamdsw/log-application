@@ -6,25 +6,27 @@ import { AlertModalService } from 'src/app/services/alert-modal.service';
 import { DropdownService } from 'src/app/services/dropdown.service';
 import { LogService } from 'src/app/services/domain/log.service';
 
+import { LogUtils } from 'src/app/shared/utils/log-utils';
+
 import { HttpStatusCode } from 'src/app/enums/http-status-code.enum';
 import { ILogNewDTO } from 'src/app/models/ilog.new.dto';
 
 import { BaseFormComponent } from 'src/app/shared/base-form/base-form.component';
-import { LogUtils } from 'src/app/shared/utils/log-utils';
 
 @Component({
   selector: 'app-manual-log',
-  templateUrl: './manual-log.component.html',
-  styleUrls: ['./manual-log.component.css']
+  templateUrl: './manual-log.component.html'
 })
 export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements OnInit, OnDestroy {
 
-  // FIELDS
+  // Fields
 
   public httpStatusDescriptions: string[] = [];
-  public httpMethods: string[] = [ 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT' ];
+  public httpMethods: string[] = [
+    'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT'
+  ];
 
-  // CONSTRUCTOR
+  // Constructor
 
   constructor(
     protected formBuilder: FormBuilder,
@@ -36,19 +38,18 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
     super(formBuilder, router, alertModalService);
   }
 
-  // LIFECYCLE HOOKS
+  // Hooks
 
   ngOnInit(): void {
-
     this.form = this.buildForm ();
     this.httpStatusDescriptions = this.dropdownService.listHttpStatusDescriptions ();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe ();
+    this.subscription$.unsubscribe ();
   }
 
-  // OVERRIDED FUNCTIONS
+  // Overrided Functions
 
   protected buildForm(): FormGroup {
     return this.formBuilder.group ({
@@ -61,33 +62,32 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
     });
   }
 
-  protected submit() {
+  protected submit(): void {
 
     this.model = (this.form.value as ILogNewDTO);
 
     if (!LogUtils.checkValidIpAddress (this.model.ip)) {
-      this.alertModalService.showDanger ('Error', 'Invalid IP Address');
+      this.alertModalService.showDanger ('Attention', 'Invalid IP Address');
       return;
     }
 
-    const WAIT_MODAL = this.alertModalService.showWait ();
+    const waitModal = this.alertModalService.showWait ();
 
-    this.subscription = this.logService.insertLog (this.model).subscribe (
-      response => {
-        console.log ('response', response);
-        this.alertModalService.hideModal (WAIT_MODAL);
+    this.subscription$ = this.logService.insertLog (this.model).subscribe (
+      () => {
+        this.alertModalService.hideModal (waitModal);
         this.alertModalService.showSuccess ('Success', 'Log inserted!');
         this.router.navigate (['search-logs']);
       },
-      error => {
+      (error) => {
         console.log ('error', error);
-        this.alertModalService.hideModal (WAIT_MODAL);
-        this.alertModalService.showDanger ('Error', 'Some error happened on log insertion!');
+        this.alertModalService.hideModal (waitModal);
+        this.alertModalService.showDanger ('Error', `Some error happened on log insertion: ${error.message}`);
       }
     );
   }
 
-  // HELPER FUNCTIONS
+  // Helper Functions
 
   private getCurrentDateTime(): string {
     let isoString = new Date().toISOString();
@@ -96,7 +96,7 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
     return isoString;
   }
 
-  public getHttpStatusCode(description: string) {
+  public getHttpStatusCode(description: string): any {
     return HttpStatusCode[description];
   }
 
@@ -118,21 +118,26 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
       }
 
       case 'ip-address': {
-        const WAIT_MODAL = this.alertModalService.showWait ();
-        this.subscription = this.logService.findUserIpAddress ().subscribe (
+        const errors = {
+          header: 'Error',
+          message: 'Unable to get your IP Address. Please try later.'
+        };
+
+        const waitModal = this.alertModalService.showWait ();
+        this.subscription$ = this.logService.findUserIpAddress ().subscribe (
           (response: any) => {
-            this.alertModalService.hideModal (WAIT_MODAL);
+            this.alertModalService.hideModal (waitModal);
 
             if (response != null && response.ip) {
               this.form.patchValue ({ ip: response.ip });
             }
             else {
-              this.alertModalService.showDanger ('Error', 'Unable to get your IP Address. Please try later.');
+              this.alertModalService.showDanger (errors.header, errors.message);
             }
           },
-          error => {
-            this.alertModalService.hideModal (WAIT_MODAL);
-            this.alertModalService.showDanger ('Error', 'Unable to get your IP Address. Please try later.');
+          () => {
+            this.alertModalService.hideModal (waitModal);
+            this.alertModalService.showDanger (errors.header, errors.message);
           }
         );
         break;

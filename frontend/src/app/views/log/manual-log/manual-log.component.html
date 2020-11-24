@@ -1,11 +1,13 @@
 <!-- manual log -->
-<div class="container">
-    <div class="box-wrapper mx-auto my-3 my-md-5">
+<article class="container-fluid">
+    <div class="box-wrapper w-50 mx-auto my-5">
         <div class="card bg-darksky text-white">
 
             <!-- header -->
             <div class="card-header">
-                <h4 class="text-center"> Insert Manual Log </h4>
+                <header>
+                    <h2 class="text-center"> Insert Manual Log </h2>
+                </header>
             </div>
 
             <!-- form -->
@@ -15,17 +17,21 @@
                     <!-- datetime -->
                     <div class="form-row">
                         <div class="col-12 form-group">
-                            <label for="inputDatetime" class="required-label"> * Data: </label>
+                            <label for="inputDatetime" class="required-label"> 
+                                * Data: 
+                            </label>
+
                             <div class="input-group">
-                                <input type="text" id="inputDatetime" class="form-control"
-                                       maxlength="23" value=""
-                                       placeholder="2000-01-01 00:00:00.000"
-                                       [ngClass]="buildValidationClass ('data')"
+                                <input type="text" id="inputDatetime" class="form-control" maxlength="23"
+                                       placeholder="2000-01-01 00:00:00.000" [ngClass]="buildValidationClass ('data')"
                                        formControlName="data" >
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" (click)="getCurrentUserValue ('datetime');"> Get </button>
+                                    <button type="button" class="btn btn-primary" (click)="getCurrentUserValue ('datetime');"> 
+                                        Get 
+                                    </button>
                                 </div>
                             </div>
+
                             <app-error-message [control]="form.get ('data')"></app-error-message>
                         </div>
                     </div>
@@ -33,17 +39,20 @@
                     <!-- ip address -->
                     <div class="form-row">
                         <div class="col-12 form-group">
-                            <label for="inputIpAddress" class="required-label"> * IP (IPv4): </label>
+                            <label for="inputIpAddress" class="required-label"> 
+                                * IP (IPv4): 
+                            </label>
 
                             <div class="input-group">
-                                <input type="text" id="inputIpAddress" class="form-control"
-                                       maxlength="17" value=""
+                                <input type="text" id="inputIpAddress" class="form-control" maxlength="17"
                                        placeholder="255.255.255.255"
                                        [ngClass]="buildValidationClass ('ip')" 
                                        mask="IP" [dropSpecialCharacters]="false"
                                        formControlName="ip">
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" (click)="getCurrentUserValue ('ip-address');"> Get </button>
+                                    <button type="button" class="btn btn-primary" (click)="getCurrentUserValue ('ip-address');"> 
+                                        Get
+                                     </button>
                                 </div>
                             </div>
 
@@ -54,30 +63,43 @@
                     <!-- http method -->
                     <div class="form-row">
                         <div class="col-12 form-group">
-                            <label for="inputHttpMethod" class="required-label"> * Request : </label>
-                            <input type="text" id="inputHttpMethod" class="form-control" value=""
-                                   placeholder="GET / HTTP/1.1"
-                                   list="datalistHttpMethods"
+                            <label for="inputHttpMethod" class="required-label"> 
+                                * Request : 
+                            </label>
+
+                            <input type="text" id="inputHttpMethod" class="form-control"
+                                   placeholder="GET / HTTP/1.1" list="datalistHttpMethods"
                                    [ngClass]="buildValidationClass ('request')" 
                                    formControlName="request">
+
                             <app-error-message [control]="form.get ('request')"></app-error-message>
                         </div>
 
                         <datalist id="datalistHttpMethods" class="d-none">
-                            <option *ngFor="let option of httpMethods;" [value]="option"> {{ option }}</option>
+                            <option *ngFor="let option of httpMethods;" [value]="option">
+                                {{ option }}
+                            </option>
                         </datalist>
                     </div>
 
                     <!-- http status code -->
                     <div class="form-row">
                         <div class="col-12 form-group">
-                            <label for="selectHttpStatusCode" class="required-label"> * Status: </label>
+                            <label for="selectHttpStatusCode" class="required-label"> 
+                                * Status: 
+                            </label>
+
                             <select id="selectHttpStatusCode" class="form-control" 
                                     [ngClass]="buildValidationClass ('status')" 
                                     formControlName="status">
-                                <option [value]="null"> Choose an Option </option>
-                                <option *ngFor="let description of httpStatusDescriptions" [value]="getHttpStatusCode (description)"  > {{ getHttpStatusCode (description) }} - {{ formatEnumDescription (description) }} </option>
+                                <option [value]="null"> 
+                                    Choose an Option 
+                                </option>
+                                <option *ngFor="let description of httpStatusDescriptions" [value]="getHttpStatusCode (description)" > 
+                                    {{ getHttpStatusCode (description) }} - {{ formatEnumDescription (description) }} 
+                                </option>
                             </select>
+
                             <app-error-message [control]="form.get ('status')"></app-error-message>
                         </div>
                     </div>
@@ -85,15 +107,18 @@
                     <!-- user agent -->
                     <div class="form-row">
                         <div class="col-12 form-group">
-                            <label for="inputUserAgent" class="required-label"> * User Agent: </label>
+                            <label for="inputUserAgent" class="required-label"> 
+                                * User Agent: 
+                            </label>
 
                             <div class="input-group">
-                                <input type="text" id="inputUserAgent" class="form-control" value="" 
-                                       placeholder="Mozilla...."
+                                <input type="text" id="inputUserAgent" class="form-control" placeholder="Mozilla...."
                                        [ngClass]="buildValidationClass ('userAgent')" 
-                                       formControlName="userAgent" >
+                                       formControlName="userAgent">
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary" (click)="getCurrentUserValue ('user-agent');"> Get </button>
+                                    <button type="button" class="btn btn-primary" (click)="getCurrentUserValue ('user-agent');"> 
+                                        Get 
+                                    </button>
                                 </div>
                             </div>
 
@@ -101,7 +126,9 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="d-none" #buttonSubmit> Submit </button>
+                    <button type="submit" class="d-none" #buttonSubmit> 
+                        Submit 
+                    </button>
                 </form>
             </div>
 
@@ -109,10 +136,12 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-12">
-                        <button type="button" class="btn btn-success float-right" (click)="buttonSubmit.click ()"> Submit </button>
+                        <button type="button" class="btn btn-success float-right" (click)="buttonSubmit.click ();"> 
+                            Submit 
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</article>

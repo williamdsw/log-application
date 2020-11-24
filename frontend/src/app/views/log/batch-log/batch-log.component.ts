@@ -45,7 +45,7 @@ export class BatchLogComponent extends BaseFormComponent<null> implements OnInit
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe ();
+    this.subscription$.unsubscribe ();
   }
 
   // OVERRIDED FUNCTIONS
@@ -59,7 +59,7 @@ export class BatchLogComponent extends BaseFormComponent<null> implements OnInit
   protected submit() {
     const WAIT_MODAL = this.alertModalService.showWait ();
 
-    this.subscription = this.logService.insertLogFiles (this.inputFile.files).subscribe (
+    this.subscription$ = this.logService.insertLogFiles (this.inputFile.files).subscribe (
       response => {
         console.log ('response', response);
         this.alertModalService.hideModal (WAIT_MODAL);
