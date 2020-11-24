@@ -11,14 +11,9 @@ export class PagerService {
 
   // HELPER FUNCTIONS
 
-  public getPager(totalItems: number, currentPage: number, pageSize: number) {
-    const totalPages = Math.ceil (totalItems / pageSize);
-    if (currentPage < 1) {
-      currentPage = 1;
-    }
-    else if (currentPage > totalPages) {
-      currentPage = totalPages;
-    }
+  public getPager(totalItems: number, currentPage: number, pageSize: number): object {
+    const totalPages = Math.ceil(totalItems / pageSize);
+    currentPage = (currentPage < 1 ? 1 : (currentPage > totalPages ? totalPages : currentPage));
 
     let startPage: number;
     let endPage: number;
@@ -44,8 +39,8 @@ export class PagerService {
 
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min ((startIndex + pageSize - 1), (totalItems - 1));
-    const KEYS = Array ((endPage + 1) - startPage).keys ();
-    const pages = Array.from (KEYS).map (value => startPage + value);
+    const keys = Array ((endPage + 1) - startPage).keys ();
+    const pages = Array.from (keys).map (value => startPage + value);
 
     return {
       totalItems, currentPage, pageSize, totalPages,

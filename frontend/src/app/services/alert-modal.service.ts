@@ -17,31 +17,31 @@ export class AlertModalService {
 
   // HELPER FUNCTIONS
 
-  private showAlertModal(title: string, message: string, type: AlertModalType, dismissTimeout?: number) {
-    const MODAL_REF: BsModalRef = this.modalService.show (AlertModalComponent);
-    MODAL_REF.content.type = type;
-    MODAL_REF.content.title = title;
-    MODAL_REF.content.message = message;
+  private showAlertModal(title: string, message: string, type: AlertModalType, dismissTimeout?: number): void {
+    const modalRef = this.modalService.show (AlertModalComponent);
+    modalRef.content.type = type;
+    modalRef.content.title = title;
+    modalRef.content.message = message;
 
     if (dismissTimeout) {
-      setTimeout (() => MODAL_REF.hide (), dismissTimeout);
+      setTimeout (() => modalRef.hide (), dismissTimeout);
     }
   }
 
-  public showDanger(title: string, message: string) {
+  public showDanger(title: string, message: string): void {
     this.showAlertModal (title, message, AlertModalType.DANGER);
   }
 
-  public showSuccess(title: string, message: string) {
+  public showSuccess(title: string, message: string): void {
     this.showAlertModal (title, message, AlertModalType.SUCCESS, 3000);
   }
 
   public showWait(): BsModalRef {
-    const MODAL_REF: BsModalRef = this.modalService.show (WaitModalComponent);
-    return MODAL_REF;
+    const modalRef = this.modalService.show (WaitModalComponent);
+    return modalRef;
   }
 
-  public hideModal(modalRef: BsModalRef) {
+  public hideModal(modalRef: BsModalRef): void {
     if (modalRef != null) {
       modalRef.hide ();
     }

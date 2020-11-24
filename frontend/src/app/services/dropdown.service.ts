@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { HttpStatusCode } from '../enums/http-status-code.enum';
 
 @Injectable({
@@ -11,14 +12,14 @@ export class DropdownService {
   // HELPER FUNCTIONS
 
   public listHttpStatusDescriptions(): string[] {
-    const DESCRIPTIONS: string[] = [];
-    for (const DESCRIPTION in HttpStatusCode) {
-      if (HttpStatusCode.hasOwnProperty (DESCRIPTION)) {
-        DESCRIPTIONS.push (DESCRIPTION);
+    const listDescriptions: string[] = [];
+    for (const description in HttpStatusCode) {
+      if (HttpStatusCode.hasOwnProperty (description)) {
+        listDescriptions.push (description);
       }
     }
 
-    return DESCRIPTIONS;
+    return listDescriptions;
   }
 
 }
