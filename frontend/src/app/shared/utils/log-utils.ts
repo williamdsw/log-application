@@ -9,10 +9,11 @@ export class LogUtils {
             return false;
         }
         else {
+            const invalidDate = 'Invalid Date';
             startDateTime = new Date(startDateTime);
             endDateTime = new Date(endDateTime);
 
-            if (startDateTime == 'Invalid Date' || endDateTime == 'Invalid Date') {
+            if (startDateTime.toString() === invalidDate || endDateTime.toString() === invalidDate) {
                 return false;
             }
 

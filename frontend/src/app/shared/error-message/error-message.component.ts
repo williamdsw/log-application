@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { FormValidators } from '../utils/form-validators';
@@ -19,11 +19,11 @@ export class ErrorMessageComponent {
 
   // HELPER FUNCTIONS
 
-  public get errorMessages() {
+  public get errorMessages(): any {
 
-    for (const PROPERTY_NAME in this.control.errors) {
-      if (this.control.errors.hasOwnProperty (PROPERTY_NAME) && this.control.dirty) {
-        return FormValidators.getErrorMessage (PROPERTY_NAME, this.control.errors[PROPERTY_NAME]);
+    for (const propertyName in this.control.errors) {
+      if (this.control.errors.hasOwnProperty (propertyName) && this.control.dirty) {
+        return FormValidators.getErrorMessage (propertyName, this.control.errors[propertyName]);
       }
     }
 

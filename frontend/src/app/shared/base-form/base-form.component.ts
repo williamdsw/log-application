@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -30,12 +30,12 @@ export abstract class BaseFormComponent<T> {
 
     // ABSTRACT FUNCTIONS
 
-    protected abstract submit();
-    protected abstract buildForm();
+    protected abstract submit(): void;
+    protected abstract buildForm(): void;
 
     // HELPER FUNCTIONS
 
-    public onSubmit() {
+    public onSubmit(): void {
         this.wasSubmitted = true;
 
         if (this.form.valid) {
@@ -46,28 +46,27 @@ export abstract class BaseFormComponent<T> {
         }
     }
 
-    protected checkValidations(currentForm: FormGroup | FormArray) {
+    protected checkValidations(currentForm: FormGroup | FormArray): void {
         Object.keys (currentForm.controls).forEach (field => {
-            const CONTROL = currentForm.get (field);
-            CONTROL.markAsDirty ();
-            CONTROL.markAsTouched ();
+            const control = currentForm.get (field);
+            control.markAsDirty ();
+            control.markAsTouched ();
 
-            if (CONTROL instanceof FormGroup || CONTROL instanceof FormArray) {
-                this.checkValidations (CONTROL);
+            if (control instanceof FormGroup || control instanceof FormArray) {
+                this.checkValidations (control);
             }
         });
     }
 
-    public checkIsValid(field: string) {
-        const FIELD = this.form.get (field);
-        return FIELD.valid;
+    public checkIsValid(field: string): boolean {
+        return this.form.get (field).valid;
     }
 
-    public hasError(field: string) {
+    public hasError(field: string): ValidationErrors {
         return this.form.get (field).errors;
     }
 
-    public buildValidationClass(field: string) {
+    public buildValidationClass(field: string): {} {
         return {
             'is-invalid': this.wasSubmitted && this.hasError (field),
             'is-valid': this.wasSubmitted && this.hasError (field)
