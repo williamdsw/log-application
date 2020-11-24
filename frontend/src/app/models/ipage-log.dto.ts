@@ -28,4 +28,5 @@ export interface IPageLogDTO {
     numberOfElements: number;
     first: boolean;
     empty: boolean;
+
 }

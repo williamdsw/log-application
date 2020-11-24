@@ -1,5 +1,6 @@
 
 export interface ILogDTO {
+
     id: string;
     data: string;
     ip: string;
@@ -7,4 +8,5 @@ export interface ILogDTO {
     status: number;
     userAgent: string;
     count: number;
+
 }

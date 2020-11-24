@@ -5,4 +5,5 @@ export interface ILogFieldsDTO {
     ip: string;
     userAgent: string;
     count: number;
+
 }
