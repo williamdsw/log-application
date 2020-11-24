@@ -10,7 +10,6 @@ import { BaseFormComponent } from 'src/app/shared/base-form/base-form.component'
 @Component({
   selector: 'app-batch-log',
   templateUrl: './batch-log.component.html',
-  styleUrls: ['./batch-log.component.css']
 })
 export class BatchLogComponent extends BaseFormComponent<null> implements OnInit, OnDestroy {
 
@@ -19,6 +18,9 @@ export class BatchLogComponent extends BaseFormComponent<null> implements OnInit
   private fileContainer: HTMLDivElement = null;
   private labelFile: HTMLLabelElement = null;
   private inputFile: HTMLInputElement = null;
+  private extensions: string[] = [
+    '.log', '.txt'
+  ];
 
   // CONSTRUCTOR
 
@@ -36,9 +38,9 @@ export class BatchLogComponent extends BaseFormComponent<null> implements OnInit
   ngOnInit(): void {
     this.form = this.buildForm ();
 
-    this.fileContainer = document.getElementById ('fileContainer') as HTMLDivElement;
-    this.labelFile = document.getElementById ('labelFile') as HTMLLabelElement;
-    this.inputFile = document.getElementById ('inputFile') as HTMLInputElement;
+    this.fileContainer = document.querySelector ('#fileContainer') as HTMLDivElement;
+    this.labelFile = document.querySelector ('#labelFile') as HTMLLabelElement;
+    this.inputFile = document.querySelector ('#inputFile') as HTMLInputElement;
     this.inputFile.addEventListener ('change', () => {
       this.renderFileList (this.inputFile.files);
     });
@@ -56,40 +58,35 @@ export class BatchLogComponent extends BaseFormComponent<null> implements OnInit
     });
   }
 
-  protected submit() {
-    const WAIT_MODAL = this.alertModalService.showWait ();
-
+  protected submit(): void {
     this.subscription$ = this.logService.insertLogFiles (this.inputFile.files).subscribe (
-      response => {
-        console.log ('response', response);
-        this.alertModalService.hideModal (WAIT_MODAL);
+      () => {
         this.alertModalService.showSuccess ('Success', 'File(s) data inserted successfully!');
         this.router.navigate (['search-logs']);
       },
-      error => {
-        console.log ('error', error);
-        this.alertModalService.hideModal (WAIT_MODAL);
-        this.alertModalService.showDanger ('Error', 'Some error happened with those file(s) data!');
+      (error) => {
+        this.alertModalService.showDanger ('Error', `Some error happened with those file(s) data: ${error.error.message} `);
       }
     );
   }
 
-  private renderFileList(files: FileList) {
+  private renderFileList(files: FileList): void {
     this.fileContainer.innerHTML = '';
 
     for (let index = 0; index < files.length; index++) {
-      const FILE = files.item (index) as File;
-      const fileName = FILE.name.toLowerCase ();
+      const currentFile = files.item (index) as File;
+      const fileName = currentFile.name.toLowerCase();
+      const extension = fileName.substring(fileName.lastIndexOf('.'), fileName.length);
 
-      if (!fileName.includes ('.log') && !fileName.includes ('.txt')) {
+      if (this.extensions.indexOf(extension) === -1) {
         this.fileContainer.innerHTML = '';
         this.form.patchValue ({ file: null });
-        console.log (document.getElementById ('inputFile'));
-        this.alertModalService.showDanger ('Attention', ' Only .txt and .log files are allowed!');
+        this.alertModalService.showDanger('Attention', ' Only .txt and .log files are allowed!');
+        this.labelFile.innerHTML = 'Choose File(s)';
         return;
       }
 
-      const paragraph = `<p class="h4 text-monospace"> ${FILE.name} </p>`;
+      const paragraph = `<p class="h4 text-monospace"> ${currentFile.name} </p>`;
       this.fileContainer.innerHTML += paragraph;
     }
 

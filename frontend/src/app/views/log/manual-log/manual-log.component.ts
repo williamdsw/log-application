@@ -71,17 +71,13 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
       return;
     }
 
-    const waitModal = this.alertModalService.showWait ();
-
     this.subscription$ = this.logService.insertLog (this.model).subscribe (
       () => {
-        this.alertModalService.hideModal (waitModal);
         this.alertModalService.showSuccess ('Success', 'Log inserted!');
         this.router.navigate (['search-logs']);
       },
       (error) => {
         console.log ('error', error);
-        this.alertModalService.hideModal (waitModal);
         this.alertModalService.showDanger ('Error', `Some error happened on log insertion: ${error.message}`);
       }
     );
@@ -123,11 +119,8 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
           message: 'Unable to get your IP Address. Please try later.'
         };
 
-        const waitModal = this.alertModalService.showWait ();
         this.subscription$ = this.logService.findUserIpAddress ().subscribe (
           (response: any) => {
-            this.alertModalService.hideModal (waitModal);
-
             if (response != null && response.ip) {
               this.form.patchValue ({ ip: response.ip });
             }
@@ -136,7 +129,6 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
             }
           },
           () => {
-            this.alertModalService.hideModal (waitModal);
             this.alertModalService.showDanger (errors.header, errors.message);
           }
         );
