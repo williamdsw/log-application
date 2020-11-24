@@ -24,7 +24,7 @@
     "chart.js": "^2.9.3",
     "ng2-charts": "^2.4.2",
     "ngx-bootstrap": "^5.6.1",
-    "ngx-mask": "^9.0.2",
+    "ngx-mask": "^11.1.2",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
