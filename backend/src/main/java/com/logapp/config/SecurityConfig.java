@@ -20,6 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private static final String[] PUBLIC_MATCHERS_GET = { "/api/logs/**" };
 	private static final String[] PUBLIC_MATCHERS_POST = { "/api/logs/**" };
+	private static final String[] ALLOWED_METHODS = {
+		"POST", "GET", "PUT", "DELETE", "OPTIONS"
+	};
 	
 	// OVERRIDED FUNCTIONS
 	
@@ -39,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected CorsConfigurationSource corsConfigurationSource () {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource ();
 		CorsConfiguration configuration = new CorsConfiguration ().applyPermitDefaultValues ();
-		configuration.setAllowedMethods (Arrays.asList ("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedMethods (Arrays.asList (ALLOWED_METHODS));
 		configuration.setExposedHeaders (Arrays.asList ("Location"));
 		source.registerCorsConfiguration ("/**", configuration);
 		return source;

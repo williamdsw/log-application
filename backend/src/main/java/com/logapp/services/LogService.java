@@ -74,6 +74,10 @@ public class LogService {
 	}
 	
 	public void checkFileContent (String fileContent) {
+		if (fileContent == null) {
+			throw new FileException("File is null");
+		}
+		
 		if (fileContent.isEmpty ()) {
 			throw new FileException ("File is empty!");
 		}
@@ -87,30 +91,29 @@ public class LogService {
 		
 		checkFileContent (fileContent);
 		
+		final int MAX_NUMBER_OF_PIPES = 5;
+		
 		List<Log> logs = new ArrayList<> ();
 		
-		if (!fileContent.isEmpty () && fileContent.contains ("|")) {
-			String[] lines = fileContent.split ("\n");
-			for (String line : lines) {
-				String[] columns = line.split ("\\|");
-				
-				if (columns.length != 5) {
-					throw new FileException ("Invalid data format!");
-				}
-				
-				if (columns.length == 5) {
-					Log log = new Log ();
-					
-					log.setId (null);
-					log.setData (Timestamp.valueOf(columns[0]));
-					log.setIp (columns[1]);
-					log.setRequest (columns[2]);
-					log.setStatus (Integer.parseInt(columns[3]));
-					log.setUserAgent (columns[4]);
-					
-					logs.add (log);
-				}				
+		String[] lines = fileContent.split ("\n");
+		for (String line : lines) {
+			String[] columns = line.split ("\\|");
+			
+			if (columns.length != MAX_NUMBER_OF_PIPES) {
+				throw new FileException ("Invalid data format!");
 			}
+			else {
+				Log log = new Log ();
+				
+				log.setId (null);
+				log.setData (Timestamp.valueOf(columns[0]));
+				log.setIp (columns[1]);
+				log.setRequest (columns[2]);
+				log.setStatus (Integer.parseInt(columns[3]));
+				log.setUserAgent (columns[4]);
+				
+				logs.add (log);
+			}				
 		}
 		
 		return logs;
