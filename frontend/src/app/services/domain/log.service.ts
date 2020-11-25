@@ -71,15 +71,8 @@ export class LogService extends CrudService<ILogDTO | ILogNewDTO | IPageLogDTO |
 
   // -> AGRREGATIONS
 
-  public findByParamsWhereUrlIsWithPipe(url: string, requestParams?: RequestParam[]): Observable<object> {
-    let params = new HttpParams();
-    if (requestParams) {
-      requestParams.forEach(param => {
-        params = params.append(param.key, param.value);
-      });
-    }
-
-    return this.listAll(url, params);
+  public findByWhereUrlIsWithPipe(url: string): Observable<object> {
+    return this.listAll(url).pipe (take (1));
   }
 
   public getTenMostRequestsByIp(): Observable<object> {
@@ -92,24 +85,5 @@ export class LogService extends CrudService<ILogDTO | ILogNewDTO | IPageLogDTO |
 
   public getTenMostRequestsByData(): Observable<object> {
     return this.listAll (`${this._baseUrl}/ten-most-requests-by-data`).pipe (take (1));
-  }
-
-  public getNumberOfRequestsByIp(ip: string): Observable<object> {
-    let params = new HttpParams ();
-    params = params.append ('value', ip);
-    return this.listAll (`${this._baseUrl}/number-of-requests-ip`, params);
-  }
-
-  public getNumberOfRequestsByUserAgent(userAgent: string): Observable<object> {
-    let params = new HttpParams ();
-    params = params.append ('value', userAgent);
-    return this.listAll (`${this._baseUrl}/number-of-requests-user-agent`, params);
-  }
-
-  public getNumberOfRequestsByDataBetween(start: string, end: string): Observable<object> {
-    let params = new HttpParams ();
-    params = params.append ('start', start);
-    params = params.append ('end', end);
-    return this.listAll (`${this._baseUrl}/number-of-requests-data`, params);
   }
 }
