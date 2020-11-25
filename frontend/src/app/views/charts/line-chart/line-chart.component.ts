@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ChartDataSets } from 'chart.js';
@@ -47,8 +47,9 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
 
   // HELPER FUNCTIONS
 
-  private getTenMostRequestsByIp() {
-    return this.logService.getTenMostRequestsByIp().subscribe(
+  private getTenMostRequestsByIp(): Subscription {
+    const url = this.logService.baseUrl + '/ten-most-requests-by-ip';
+    return this.logService.findByWhereUrlIsWithPipe(url).subscribe(
       (listDto: ILogFieldsDTO[]) => {
         this.isLoading = false;
         const data = [];
@@ -60,7 +61,7 @@ export class LineChartComponent extends BaseChartComponent implements OnInit, On
         this.count = data.reduce ((a, b) => a + b, 0);
         this.lineChartData = [{ data, label: 'Most 10 Requests By IP' }];
       },
-      error => {
+      () => {
         this.isLoading = false;
         this.count = 0;
       },

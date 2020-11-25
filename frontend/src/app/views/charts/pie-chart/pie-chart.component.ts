@@ -42,12 +42,13 @@ export class PieChartComponent extends BaseChartComponent implements OnInit, OnD
   }
   // HELPER FUNCTIONS
 
-  public toggleLegend() {
+  public toggleLegend(): void {
     this.chartLegend = !this.chartLegend;
   }
 
-  private getTenMostRequestsByUserAgent() {
-    return this.logService.getTenMostRequestsByUserAgent().subscribe(
+  private getTenMostRequestsByUserAgent(): Subscription {
+    const url = this.logService.baseUrl + '/ten-most-requests-by-user-agent';
+    return this.logService.findByWhereUrlIsWithPipe(url).subscribe(
       (listDto: ILogFieldsDTO[]) => {
         this.isLoading = false;
         const data = [];
@@ -60,14 +61,14 @@ export class PieChartComponent extends BaseChartComponent implements OnInit, OnD
         this.count = data.reduce ((a, b) => a + b, 0);
         this.pieChartData = data;
       },
-      error => {
+      () => {
         this.isLoading = false;
         this.count = 0;
       }
     );
   }
 
-  private getContentFromUserAgent(userAgent: string) {
+  private getContentFromUserAgent(userAgent: string): string {
     const indexOfRightParenthesis = userAgent.indexOf('(');
     const indexOfLeftParenthesis = userAgent.indexOf(')');
 

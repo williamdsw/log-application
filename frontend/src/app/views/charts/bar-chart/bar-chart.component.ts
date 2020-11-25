@@ -47,8 +47,9 @@ export class BarChartComponent extends BaseChartComponent implements OnInit, OnD
 
   // HELPER FUNCTIONS
 
-  private getTenMostRequestsByData() {
-    return this.logService.getTenMostRequestsByData().subscribe(
+  private getTenMostRequestsByData(): Subscription {
+    const url = this.logService.baseUrl + '/ten-most-requests-by-data';
+    return this.logService.findByWhereUrlIsWithPipe(url).subscribe(
       (listDto: ILogFieldsDTO[]) => {
         this.isLoading = false;
         const data = [];
@@ -60,11 +61,10 @@ export class BarChartComponent extends BaseChartComponent implements OnInit, OnD
         this.count = data.reduce ((a, b) => a + b, 0);
         this.barChartData = [{ data, label: 'Most 10 Requests By Hour' }];
       },
-      error => {
+      () => {
         this.isLoading = false;
         this.count = 0;
       },
     );
   }
-
 }

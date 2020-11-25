@@ -14,6 +14,7 @@ export abstract class BaseChartComponent {
     public chartLabels: Label[] = [];
     public chartOptions: ChartOptions = {
         responsive: true,
+        aspectRatio: 1
     };
     public chartColors: Color[] = [];
     public chartLegend = true;
