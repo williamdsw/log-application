@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests ()
 			.antMatchers (HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll ()
 			.antMatchers (HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll ()
-			.anyRequest();
+			.anyRequest().anonymous();
 		
 		http.sessionManagement ().sessionCreationPolicy (SessionCreationPolicy.STATELESS);
 	}

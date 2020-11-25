@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // API: 'http://localhost:8080'
-  API: 'https://log-application-backend.herokuapp.com/'
+  API: 'https://log-application-backend.herokuapp.com'
 };
 
 /*
