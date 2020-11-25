@@ -59,12 +59,15 @@ export class BatchLogComponent extends BaseFormComponent<null> implements OnInit
   }
 
   protected submit(): void {
+    const waitModal = this.alertModalService.showWait();
     this.subscription$ = this.logService.insertLogFiles (this.inputFile.files).subscribe (
       () => {
+        this.alertModalService.hideModal(waitModal);
         this.alertModalService.showSuccess ('Success', 'File(s) data inserted successfully!');
         this.router.navigate (['search-logs']);
       },
       (error) => {
+        this.alertModalService.hideModal(waitModal);
         this.alertModalService.showDanger ('Error', `Some error happened with those file(s) data: ${error.error.message} `);
       }
     );

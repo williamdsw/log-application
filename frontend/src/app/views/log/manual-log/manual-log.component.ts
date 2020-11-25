@@ -71,13 +71,16 @@ export class ManualLogComponent extends BaseFormComponent<ILogNewDTO> implements
       return;
     }
 
+    const waitModal = this.alertModalService.showWait();
+
     this.subscription$ = this.logService.insertLog (this.model).subscribe (
       () => {
+        this.alertModalService.hideModal(waitModal);
         this.alertModalService.showSuccess ('Success', 'Log inserted!');
         this.router.navigate (['search-logs']);
       },
       (error) => {
-        console.log ('error', error);
+        this.alertModalService.hideModal(waitModal);
         this.alertModalService.showDanger ('Error', `Some error happened on log insertion: ${error.message}`);
       }
     );

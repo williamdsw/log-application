@@ -37,7 +37,8 @@ export class AlertModalService {
   }
 
   public showWait(): BsModalRef {
-    const modalRef = this.modalService.show (WaitModalComponent);
+    const config = { ignoreBackdropClick: true, keyboard: false };
+    const modalRef = this.modalService.show (WaitModalComponent, config);
     return modalRef;
   }
 
