@@ -1,173 +1,221 @@
 <!-- search logs -->
-<div class="table-box shadow-lg mx-auto my-3 my-md-5 bg-darksky">
+<article class="container-fluid">
+    <div class="table-box shadow-lg mx-auto my-3 my-md-5 bg-darksky">
+        <header>
+            <h1 class="mb-5 d-block text-center text-white"> 
+                Search Logs 
+            </h1>
+        </header>
 
-    <!-- header -->
-    <h2 class="mb-5 d-block text-center text-white"> Search Logs </h2>
+        <hr class="bg-light">
 
-    <!-- search -->
-    <div class="form-row">
+        <!-- search -->
+        <div class="form-row">
 
-        <!-- filter combo -->
-        <div class="col-md-4 my-2 my-md-0">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"> Filter </span>
-                </div>
-                <select #filterCombo class="form-control" (change)="toggleFilter (filterCombo.value);">
-                    <option value="none" selected> None </option>
-                    <option value="ip-address"> IP </option>
-                    <option value="datetime"> Data Interval </option>
-                </select>
-            </div>
-        </div>
-
-        <!-- ip address input -->
-        <div class="col-md-6 my-2 my-md-0" [hidden]="currentFilter !== 'ip-address'">
-            <input type="text" id="inputIpAddress" class="form-control" placeholder="255.255.255.255" value="">
-        </div>
-
-        <!-- search button -->
-        <div class="col-md-2 my-1 my-md-0" [hidden]="currentFilter !== 'ip-address'">
-            <button type="button" class="btn btn-primary btn-block" (click)="pageNumber = 0; onSearch()"> Search </button>
-        </div>
-    </div>
-
-    <!-- dates -->
-    <div class="form-row mt-3">
-        <div class="col-12 my-2 my-md-0" [hidden]="currentFilter !== 'datetime'">
-            <div class="row">
-
-                <!-- start -->
-                <div class="col-md-5">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> Start </span>
-                        </div>
-                        <input type="date" id="inputStartDate" class="form-control" value="" maxlength="10">
-                        <div class="input-group-append">
-                            <input type="time" id="inputStartTime" class="form-control" value="" maxlength="8" step="1">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- end -->
-                <div class="col-md-5">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> End </span>
-                        </div>
-                        <input type="date" id="inputEndDate" class="form-control" value="" maxlength="10">
-                        <div class="input-group-append">
-                            <input type="time" id="inputEndTime" class="form-control" value="" maxlength="8" step="1">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- search button -->
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-primary btn-block" (click)="pageNumber = 0; onSearch()"> Search </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- table -->
-    <div class="mt-3" *ngIf="records$ | async as pageLogs; else spanLoading">
-        
-        <!-- optional parameters -->
-        <div class="row mb-3">
-            <div class="col-md-4">
+            <!-- filter combo -->
+            <div class="col-md-4 my-2 my-md-0">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"> Lines Per Page </span>
+                        <span class="input-group-text"> Filter </span>
                     </div>
-                    <select class="form-control" [(ngModel)]="linesPerPage" (change)="pageNumber = 0; onSearch ()">
-                        <option *ngFor="let option of linesPerPageOptions"> {{ option }} </option>
+                    <select #filterCombo class="form-control" (change)="toggleFilter (filterCombo.value);">
+                        <option value="none" selected> None </option>
+                        <option value="ip-address"> IP </option>
+                        <option value="datetime"> Data Interval </option>
                     </select>
                 </div>
             </div>
+
+            <!-- ip address input -->
+            <div class="col-md-6 my-2 my-md-0" [hidden]="currentFilter !== 'ip-address'">
+                <input type="text" id="inputIpAddress" class="form-control" placeholder="255.255.255.255" #ipAddressInput>
+            </div>
+
+            <!-- search button -->
+            <div class="col-md-2 my-1 my-md-0" [hidden]="currentFilter !== 'ip-address'">
+                <button type="button" class="btn btn-primary btn-block" (click)="pageNumber = 0; onSearch()"> 
+                    Search 
+                </button>
+            </div>
         </div>
 
-        <div class="table-responsive" *ngIf="!hasError && logs.length !== 0; else nothingFound">
-            <table class="table table-primary table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col" *ngFor="let header of tableHeaders"> {{ header }} </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let log of pageLogs.content; let i = index;">
-                        <td scope="row"> {{ log.id }} </td>
-                        <td scope="row"> {{ log.data | date:'yyyy-MM-dd HH:mm:ss.SSS' }} </td>
-                        <td scope="row"> {{ log.ip }} </td>
-                        <td scope="row"> {{ log.request }} </td>
-                        <td scope="row"> {{ log.status }} </td>
-                        <td scope="row"> {{ log.userAgent }} </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <!-- dates -->
+        <div class="form-row my-3">
+            <div class="col-12 my-md-0 my-2" [hidden]="currentFilter !== 'datetime'">
+                <div class="row">
 
-        
-        <div *ngIf="pager.pages && pager.pages.length !== 0">
-            <div class="pagination-container">
-                <div class="row mt-3 text-center">
-                    <div class="col-12">
-                        <ul class="pagination">
-        
-                            <!-- first -->
-                            <li class="page-item" [ngClass]="{ disabled: pager.currentPage == 1 }">
-                                <a class="page-link" (click)="changePage (1)"> First </a>
-                            </li>
-            
-                            <!-- previous -->
-                            <li class="page-item" [ngClass]="{ disabled: pager.currentPage == 1 }">
-                                <a class="page-link" (click)="changePage (pager.currentPage - 1)"> Previous </a>
-                            </li>
-            
-                            <!-- pages -->
-                            <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{ 'active': pager.currentPage == page }">
-                                <a class="page-link" (click)="changePage (page)"> {{ page }} </a>
-                            </li>
-            
-                            <!-- next -->
-                            <li class="page-item" [ngClass]="{ disabled: pager.currentPage == pager.totalPages }">
-                                <a class="page-link" (click)="changePage (pager.currentPage + 1)"> Next </a>
-                            </li>
-            
-                            <!-- first -->
-                            <li class="page-item" [ngClass]="{ disabled: pager.currentPage == pager.totalPages }">
-                                <a class="page-link" (click)="changePage (pager.totalPages)"> Last </a>
-                            </li>
-                        </ul>
+                    <!-- start -->
+                    <div class="col-md-5 col-sm-6 my-sm-0 my-1">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> Start </span>
+                            </div>
+                            <input type="date" id="inputStartDate" class="form-control" maxlength="10" #startDateInput>
+                            <div class="input-group-append">
+                                <input type="time" id="inputStartTime" class="form-control" maxlength="8" step="1" #startTimeInput>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- end -->
+                    <div class="col-md-5 col-sm-6 my-sm-0 my-1">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> End </span>
+                            </div>
+                            <input type="date" id="inputEndDate" class="form-control" maxlength="10" #endDateInput>
+                            <div class="input-group-append">
+                                <input type="time" id="inputEndTime" class="form-control" maxlength="8" step="1" #endTimeInput>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- search button -->
+                    <div class="col-md-2 my-md-0 my-4">
+                        <button type="button" class="btn btn-primary btn-block" (click)="pageNumber = 0; onSearch()"> 
+                            Search 
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- additional info-->
-            <div class="row mt-3 text-white">
-                <div class="col-6"><b> Current Page: {{ pageNumber + 1 }} of {{ pageLogs.totalPages }} </b></div>
-                <div class="col-6"><b class="float-right"> Showing {{ pageLogs.numberOfElements }} of {{ pageLogs.totalElements }} registers </b></div>
+        <hr class="bg-light">
+
+        <div class="row" *ngIf="records$ | async as pageLogs; else spanLoading">
+            <div class="col-12">
+            
+                <!-- optional parameters -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> 
+                                    Lines Per Page 
+                                </span>
+                            </div>
+                            <select class="form-control" [(ngModel)]="linesPerPage" (change)="pageNumber = 0; onSearch ()">
+                                <option *ngFor="let option of linesPerPageOptions"> 
+                                    {{ option }} 
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- table -->
+                <div class="table-responsive" *ngIf="!hasError && logs.length !== 0; else nothingFound">
+                    <table class="table table-primary table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col" *ngFor="let header of tableHeaders"> 
+                                    {{ header }} 
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let log of pageLogs.content; let i = index;">
+                                <td scope="row"> {{ log.id }} </td>
+                                <td scope="row"> {{ log.data | date:'yyyy-MM-dd HH:mm:ss.SSS' }} </td>
+                                <td scope="row"> {{ log.ip }} </td>
+                                <td scope="row"> {{ log.request }} </td>
+                                <td scope="row"> {{ log.status }} </td>
+                                <td scope="row"> {{ log.userAgent }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!-- pagination -->
+                <div *ngIf="pager.pages && pager.pages.length !== 0">
+                    <div class="pagination-container">
+                        <div class="row mt-3 text-center">
+                            <div class="col-12">
+                                <ul class="pagination">
+                
+                                    <!-- first -->
+                                    <li class="page-item" [ngClass]="{ disabled: pager.currentPage == 1 }">
+                                        <a class="page-link" (click)="changePage (1)"> 
+                                            First 
+                                        </a>
+                                    </li>
+                    
+                                    <!-- previous -->
+                                    <li class="page-item" [ngClass]="{ disabled: pager.currentPage == 1 }">
+                                        <a class="page-link" (click)="changePage (pager.currentPage - 1)"> 
+                                            Previous 
+                                        </a>
+                                    </li>
+                    
+                                    <!-- pages -->
+                                    <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{ 'active': pager.currentPage == page }">
+                                        <a class="page-link" (click)="changePage (page)"> 
+                                            {{ page }} 
+                                        </a>
+                                    </li>
+                    
+                                    <!-- next -->
+                                    <li class="page-item" [ngClass]="{ disabled: pager.currentPage == pager.totalPages }">
+                                        <a class="page-link" (click)="changePage (pager.currentPage + 1)"> 
+                                            Next 
+                                        </a>
+                                    </li>
+                    
+                                    <!-- first -->
+                                    <li class="page-item" [ngClass]="{ disabled: pager.currentPage == pager.totalPages }">
+                                        <a class="page-link" (click)="changePage (pager.totalPages)"> 
+                                            Last 
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- additional info-->
+                    <div class="row mt-3 text-white">
+                        <div class="col-md-6 col-8 mx-auto">
+                            Showing page <span class="font-weight-bold"> {{ pageNumber + 1 }} </span>
+                            of <span class="font-weight-bold"> {{ pageLogs.totalPages }} </span>
+                            pages
+                        </div>
+                        <div class="col-md-6 col-8 mx-auto">
+                            <span class="float-md-right">
+                                Showing <span class="font-weight-bold"> {{ pageLogs.numberOfElements }} </span>
+                                of <span class="font-weight-bold"> {{ pageLogs.totalElements }} </span> 
+                                registers
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
         
+
+        <!-- other templates -->
+
+        <ng-template #spanLoading>
+            <div class="bg-dark p-3 text-center text-white">
+                <span *ngIf="!hasError; else spanError"> 
+                    Loading ... 
+                </span>
+            </div>
+        </ng-template>
+
+        <ng-template #spanError>
+            <span> {{ errorMessage }} </span>
+            <button type="button" class="btn btn-info mx-1" (click)="onReload ()"> 
+                Reload 
+            </button>
+        </ng-template>
+
+        <ng-template #nothingFound>
+            <div class="bg-dark p-3 text-center text-white">
+                <span> Nothing was found! </span>
+            </div>
+        </ng-template>
+
     </div>
+</article>
 
-    <ng-template #spanLoading>
-        <div class="bg-dark p-3 text-center text-white">
-            <span *ngIf="!hasError; else spanError"> Loading ... </span>
-        </div>
-    </ng-template>
-
-    <ng-template #spanError>
-        <span> {{ errorMessage }} </span>
-        <button type="button" class="btn btn-info mx-1" (click)="onReload ()"> Reload </button>
-    </ng-template>
-
-    <ng-template #nothingFound>
-        <div class="bg-dark p-3 text-center text-white">
-            <span> Nothing was found! </span>
-        </div>
-    </ng-template>
-
-</div>
